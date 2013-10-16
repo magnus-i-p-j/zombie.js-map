@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+# I added this for simple testing in browser that don't allow file:// xhr
+
+import SimpleHTTPServer
+import SocketServer
+
+class MyHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+	def end_headers(self):
+		self.send_my_headers()
+		SimpleHTTPServer.SimpleHTTPRequestHandler.end_headers(self)
+ 
+	def send_my_headers(self):
+		self.send_header("Cache-Control", "no-cache")
+
+PORT = 8000
+
+Handler = MyHTTPRequestHandler
+
+httpd = SocketServer.TCPServer(("", PORT), Handler)
+
+print "serving at localhost:" + str(PORT)
+print "http://localhost:" + str(PORT) + "/html/test_MapWidget.html"
+httpd.serve_forever()
