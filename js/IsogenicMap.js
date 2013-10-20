@@ -13,14 +13,47 @@ var IsogenicMap = function (elementId) {
     ige.canvas(canvas, true);
 
     ige.start(function (success) {
-        if (success) {
-          ige.addGraph('IgeBaseScene');
+      if (success) {
+        var mainScene = new IgeScene2d();
+        mainScene.id('mainScene');
+        mainScene.drawBounds(true);
 
-        }
+        // Create the main viewport
+        var vp = new IgeViewport();
+        vp.addComponent(IgeMousePanComponent);
+        vp.addComponent(IgeMouseZoomComponent);
+        vp.mousePan.enabled(true);
+        vp.id('vp');
+        vp.autoSize(true);
+        vp.scene(mainScene);
+        vp.drawBounds(true);
+        vp.mount(ige);
+
+        // Create the texture maps
+        var textureMap = new IgeTextureMap();
+        textureMap.depth(0);
+        textureMap.tileWidth(120);
+        textureMap.tileHeight(120);
+
+        textureMap.drawBounds(true);
+        textureMap.autoSection(10);
+        textureMap.drawSectionBounds(true);
+        textureMap.mount(mainScene);
+
+        var grassIdx = textureMap.addTexture(grass);
+
+        textureMap.paintTile(1, 2, grassIdx, 0);
+        textureMap.paintTile(6, 2, grassIdx, 0);
+        textureMap.paintTile(3, 2, grassIdx, 0);
+        textureMap.paintTile(4, 2, grassIdx, 0);
+
+
+
+
+
       }
-    );
+    });
   };
-
 
   ige.on('texturesLoaded', init);
 };
