@@ -9,7 +9,7 @@ class MyHTTPRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 	def end_headers(self):
 		self.send_my_headers()
 		SimpleHTTPServer.SimpleHTTPRequestHandler.end_headers(self)
- 
+
 	def send_my_headers(self):
 		self.send_header("Cache-Control", "no-cache")
 
@@ -20,5 +20,5 @@ Handler = MyHTTPRequestHandler
 httpd = SocketServer.TCPServer(("", PORT), Handler)
 
 print "serving at localhost:" + str(PORT)
-print "http://localhost:" + str(PORT) + "/html/test_MapWidget.html"
+print "http://localhost:" + str(PORT) + "/html/testmap.html"
 httpd.serve_forever()
