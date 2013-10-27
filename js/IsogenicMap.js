@@ -1,8 +1,9 @@
-var IsogenicMap = function (elementId) {
+var IsogenicMap = function (elementId,textures) {
   var ige = new IgeEngine();
-  ige.showStats(1);
+//  ige.showStats(1);
 
   var grass = new IgeTexture('../img/grassTile01.jpg');
+
   var target = document.getElementById(elementId);
   var canvas = document.createElement('canvas');
   target.innerHTML = '';
@@ -43,10 +44,6 @@ var IsogenicMap = function (elementId) {
 //        textureMap.paintTile(6, 2, grassIdx, 0);
 //        textureMap.paintTile(3, 2, grassIdx, 0);
 //        textureMap.paintTile(4, 2, grassIdx, 0);
-
-
-
-
 
       }
     });
