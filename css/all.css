@@ -1,6 +1,7 @@
 #target {
-    width: 640px;
-    height: 480px;
-    margin: auto;
-    border: 3px #000077 solid;
+  width: 80%;
+  height: 480px;
+  margin: auto;
+  border: 3px #000077 solid;
+  overflow: hidden;
 }

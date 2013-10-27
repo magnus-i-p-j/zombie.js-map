@@ -3,13 +3,12 @@ var IsogenicMap = function (elementId) {
   ige.showStats(1);
 
   var grass = new IgeTexture('../img/grassTile01.jpg');
+  var target = document.getElementById(elementId);
+  var canvas = document.createElement('canvas');
+  target.innerHTML = '';
+  target.appendChild(canvas);
 
-  var init = function () {
-    var target = document.getElementById(elementId);
-    var canvas = document.createElement('canvas');
-    target.innerHTML = '';
-    target.appendChild(canvas);
-
+  var startIsogenicMap = function () {
     ige.canvas(canvas, true);
 
     ige.start(function (success) {
@@ -26,26 +25,24 @@ var IsogenicMap = function (elementId) {
         vp.id('vp');
         vp.autoSize(true);
         vp.scene(mainScene);
-        vp.drawBounds(true);
         vp.mount(ige);
 
         // Create the texture maps
         var textureMap = new IgeTextureMap();
         textureMap.depth(0);
-        textureMap.tileWidth(120);
-        textureMap.tileHeight(120);
+        textureMap.tileWidth(100);
+        textureMap.tileHeight(100);
 
-        textureMap.drawBounds(true);
-        textureMap.autoSection(10);
-        textureMap.drawSectionBounds(true);
+        textureMap.autoSection(5);
         textureMap.mount(mainScene);
 
         var grassIdx = textureMap.addTexture(grass);
 
-        textureMap.paintTile(1, 2, grassIdx, 0);
-        textureMap.paintTile(6, 2, grassIdx, 0);
-        textureMap.paintTile(3, 2, grassIdx, 0);
-        textureMap.paintTile(4, 2, grassIdx, 0);
+        textureMap.paintTile(0, 0, grassIdx, 0);
+//        textureMap.paintTile(1, 2, grassIdx, 0);
+//        textureMap.paintTile(6, 2, grassIdx, 0);
+//        textureMap.paintTile(3, 2, grassIdx, 0);
+//        textureMap.paintTile(4, 2, grassIdx, 0);
 
 
 
@@ -55,5 +52,5 @@ var IsogenicMap = function (elementId) {
     });
   };
 
-  ige.on('texturesLoaded', init);
+  ige.on('texturesLoaded', startIsogenicMap);
 };
