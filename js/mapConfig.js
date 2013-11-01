@@ -1,0 +1,6 @@
+/**
+ * @typedef {{
+ *  tileSize: number,
+ * }}
+ */
+mapConfig;
