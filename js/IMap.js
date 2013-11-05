@@ -16,10 +16,4 @@ IMap.prototype.claim = function (elementId) {};
  */
 IMap.prototype.drawTile = function (x, y, terrain) {};
 
-/**
- * @param {string} terrain
- * @param {string} uri
- */
-IMap.prototype.addTexture = function (terrain, uri) {};
-
 //TODO: Events

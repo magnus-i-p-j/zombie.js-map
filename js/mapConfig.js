@@ -4,3 +4,8 @@
  * }}
  */
 mapConfig;
+
+/**
+ * @typedef {Object.<string,string>}
+ */
+textureMap;
