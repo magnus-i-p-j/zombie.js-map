@@ -43,19 +43,20 @@ IsogenicMap.prototype.claim = function (elementId) {
 };
 
 IsogenicMap.prototype.startIsogenic = function () {
+  var self = this;
   this._ige.start(function (success) {
     if (success) {
-      console.log('success');
-      this._createMainScene();
-      this._mapManager = new TextureMapManager(this._config, this._textureFromTerrain, this._mainScene);
+      self._createMainScene();
+      self._mapManager = new TextureMapManager(self._config, self._textureFromTerrain, self._mainScene);
     }
-  }, this);
+  });
 };
 
 IsogenicMap.prototype._createMainScene = function () {
   this._mainScene = new IgeScene2d();
   this._mainScene.id('mainScene');
-  this._mainScene.drawBounds(false);
+  this._mainScene.drawBounds(true);
+
 
   var vp = new IgeViewport();
   vp.addComponent(IgeMousePanComponent);
@@ -63,7 +64,8 @@ IsogenicMap.prototype._createMainScene = function () {
   vp.id('vp');
   vp.autoSize(true);
   vp.scene(this._mainScene);
-  vp.mount(ige);
+  vp.mount(this._ige);
+
 };
 
 /**
