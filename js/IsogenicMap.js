@@ -57,7 +57,6 @@ IsogenicMap.prototype._createMainScene = function () {
   this._mainScene.id('mainScene');
   this._mainScene.drawBounds(true);
 
-
   var vp = new IgeViewport();
   vp.addComponent(IgeMousePanComponent);
   vp.mousePan.enabled(true);

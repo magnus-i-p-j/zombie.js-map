@@ -29,14 +29,11 @@ TextureMapManager.prototype._initTextures = function (textureMap, textureFromTer
 
 TextureMapManager.prototype._createTextureMap = function (config, mainScene) {
   var textureMap = new IgeTextureMap();
-  //textureMap.depth(0);
+  textureMap.depth(0);
   textureMap.tileWidth(config.tileSize);
   textureMap.tileHeight(config.tileSize);
-  //textureMap.autoSection(5);
+  textureMap.autoSection(5);
   textureMap.mount(mainScene);
-  textureMap.drawSectionBounds(true);
-  textureMap.drawMouse(true);
-
   return textureMap;
 };
 
@@ -47,7 +44,7 @@ TextureMapManager.prototype._createTextureMap = function (config, mainScene) {
  */
 TextureMapManager.prototype.drawTile = function (x, y, terrain) {
   var texIndex = this._backgroundIndexFromTerrain[terrain];
-  console.log(this);
+  this._background.cacheForceFrame();
   this._background.paintTile(x, y, texIndex, 1);
 
 };
