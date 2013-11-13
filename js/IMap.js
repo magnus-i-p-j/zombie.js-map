@@ -1,4 +1,14 @@
 /**
+ * @typedef:{{
+ *  tileX: number,
+ *  tileY: number,
+ *  clientX: number,
+ *  clientY: number
+ * }}
+ */
+var mapEvent;
+
+/**
  * @interface
  */
 var IMap = function () {
@@ -16,4 +26,12 @@ IMap.prototype.claim = function (elementId) {};
  */
 IMap.prototype.drawTile = function (x, y, terrain) {};
 
-//TODO: Events
+/**
+ * @param {function(mapEvent)} callback
+ */
+IMap.prototype.onTileFocused = function(callback) {};
+
+/**
+ * @param {function(mapEvent)} callback
+ */
+IMap.prototype.onTileContext = function(callback) {};

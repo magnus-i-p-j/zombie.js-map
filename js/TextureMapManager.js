@@ -48,3 +48,10 @@ TextureMapManager.prototype.drawTile = function (x, y, terrain) {
   this._background.paintTile(x, y, texIndex, 1);
 
 };
+
+/**
+ * @returns {IgePoint}
+ */
+TextureMapManager.prototype.mouseToTile = function(){
+  return this._background.mouseToTile();
+};
