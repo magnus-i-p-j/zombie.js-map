@@ -79,6 +79,10 @@ IsogenicMap.prototype.onMouseClick = function(evt){
  */
 IsogenicMap.prototype.raiseMapEvent = function (evt, callback) {
   var point = this._mapManager.mouseToTile();
+  console.log(point);
+  if(this.vp){
+    console.log(this.vp.mousePosWorld());
+  }
   callback({
     'tileX': /** @type {number} */ point.x,
     'tileY': /** @type {number} */ point.y,
@@ -129,7 +133,8 @@ IsogenicMap.prototype._createMainScene = function () {
   this._mainScene.id('mainScene');
   this._mainScene.drawBounds(true);
 
-  var vp = new IgeViewport();
+  this.vp = new IgeViewport();
+  var vp = this.vp;
   vp.addComponent(IgeMousePanComponent);
   vp.mousePan.enabled(true);
   vp.id('vp');
