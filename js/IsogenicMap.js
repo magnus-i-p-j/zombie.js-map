@@ -9,6 +9,7 @@ var IsogenicMap = function (config, terrainUris) {
   this._config = config;
   this._mainScene = null;
   this._mapManager = null;
+  this._tileDrawQueue = [];
   this._ige = new IgeEngine();
   this._textureFromTerrain = this._initTextures(terrainUris);
 
@@ -30,7 +31,16 @@ IsogenicMap.prototype._setDefaults = function (config) {
  * @param {string} terrain
  */
 IsogenicMap.prototype.drawTile = function (x, y, terrain) {
-  this._mapManager.drawTile(x, y, terrain);
+  if(!this._mapManager){
+     this._tileDrawQueue.push(
+       {
+         x: x, y:y, terrain: terrain
+       }
+     );
+  }
+  else{
+    this._mapManager.drawTile(x, y, terrain);
+  }
 };
 
 /**
@@ -101,6 +111,12 @@ IsogenicMap.prototype._startIsogenic = function () {
     if (success) {
       self._createMainScene();
       self._mapManager = new TextureMapManager(self._config, self._textureFromTerrain, self._mainScene);
+      for(var i=0; i<self._tileDrawQueue.length; ++i){
+        self._mapManager.drawTile(
+          self._tileDrawQueue[i].x,
+          self._tileDrawQueue[i].y,
+          self._tileDrawQueue[i].terrain);
+      }
     }
   });
 };

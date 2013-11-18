@@ -12,3 +12,6 @@ var drawtilea = function () {
   map.drawTile(0, 0, 'grass');
 };
 
+map.drawTile(0, 0, 'grass');
+
+
