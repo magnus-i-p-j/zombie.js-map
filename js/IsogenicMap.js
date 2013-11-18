@@ -54,7 +54,7 @@ IsogenicMap.prototype.claim = function (elementId) {
   target.innerHTML = '';
   target.appendChild(canvas);
   this._ige.canvas(canvas, true);
-  this._ige.on('texturesLoaded', this._startIsogenic, this); // TODO: something about this
+  this._ige.on('texturesLoaded', this._startIsogenic, this);
 };
 
 /**
