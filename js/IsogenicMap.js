@@ -1,17 +1,17 @@
 /**
  * @implements IMap
  * @param {mapConfig} config
- * @param {textureMap} terrainUris
+ * @param {textureMap} textures
  * @constructor
  */
-var IsogenicMap = function (config, terrainUris) {
+var IsogenicMap = function (config, textures) {
   this._setDefaults(config);
   this._config = config;
   this._mainScene = null;
   this._mapManager = null;
   this._tileDrawQueue = [];
   this._ige = new IgeEngine();
-  this._textureFromTerrain = this._initTextures(terrainUris);
+  this._textureFromTerrain = this._initTextures(textures);
 
   this._onTileFocused = function(){console.log('focus');};
   this._onTileContext = function(){console.log('context');};
@@ -145,16 +145,14 @@ IsogenicMap.prototype._createMainScene = function () {
 };
 
 /**
- * @param terrainUris
+ * @param {textureMap} textures
  * @returns {{}}
  * @private
  */
-IsogenicMap.prototype._initTextures = function (terrainUris) {
+IsogenicMap.prototype._initTextures = function (textures) {
   var ret = {};
-  for (var index in terrainUris) {
-    if (terrainUris.hasOwnProperty(index)) {
-      ret[index] = new IgeTexture(terrainUris[index]);
-    }
+  for (var i=0; i<textures.length; ++i) {
+    ret[textures[i].type] = new IgeTexture(textures[i].uri);
   }
   return ret;
 };
