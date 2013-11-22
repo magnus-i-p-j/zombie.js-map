@@ -9,7 +9,9 @@ var TextureMap = function(config, textures){
   this._textureMap.tileWidth(config.tileSize);
   this._textureMap.tileHeight(config.tileSize);
   this._textureMap.autoSection(5);
-  this._textureIndexFromTerrain = this._initTextures(textures);
+  this._textureIndexFromTerrain = {};
+  this._terrainFromTextureIndex = [];
+  this._initTextures(textures);
 };
 
 /**
@@ -18,11 +20,12 @@ var TextureMap = function(config, textures){
  * @private
  */
 TextureMap.prototype._initTextures = function (textures) {
-  var result = {};
   for (var i=0; i < textures.length; ++i) {
-     result[textures[i].type] = this._textureMap.addTexture(textures[i].igeTexture);
+    var index = this._textureMap.addTexture(textures[i].igeTexture);
+    this._textureIndexFromTerrain[textures[i].type] = index;
+    this._terrainFromTextureIndex[index] = textures[i];
   }
-  return result;
+
 };
 
 /**
@@ -37,6 +40,16 @@ TextureMap.prototype.mount = function(scene){
  */
 TextureMap.prototype.mouseToTile = function(){
   return this._textureMap.mouseToTile();
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * @return {igeTextureDefinition}
+ */
+TextureMap.prototype.getTexture = function(x, y){
+  var index = this._textureMap.tileTextureIndex(x, y);
+  return this._terrainFromTextureIndex[index];
 };
 
 /**
