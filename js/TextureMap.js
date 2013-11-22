@@ -48,8 +48,9 @@ TextureMap.prototype.mouseToTile = function(){
  * @return {igeTextureDefinition}
  */
 TextureMap.prototype.getTexture = function(x, y){
-  var index = this._textureMap.tileTextureIndex(x, y);
-  return this._terrainFromTextureIndex[index];
+  var index = this._textureMap.map.tileData(x,y);
+  //var index = this._textureMap.tileTextureIndex(x, y);
+  return index ? this._terrainFromTextureIndex[index[0]] : null;
 };
 
 /**
@@ -57,8 +58,8 @@ TextureMap.prototype.getTexture = function(x, y){
  * @param {number} y
  * @param {string} terrain
  */
-TextureMap.prototype.drawTile = function (x, y, terrain) {
+TextureMap.prototype.drawTile = function (x, y, terrain, index) {
   var texIndex = this._textureIndexFromTerrain[terrain];
   this._textureMap.cacheForceFrame();
-  this._textureMap.paintTile(x, y, texIndex, 1);
+  this._textureMap.paintTile(x, y, texIndex, index || 1);
 };

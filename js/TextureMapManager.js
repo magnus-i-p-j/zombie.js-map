@@ -21,7 +21,7 @@ var TextureMapManager = function (config, textures, scene) {
  * @private
  */
 TextureMapManager.prototype._createTextureMap = function (config, textures, scene) {
-  var textureMap  = new TextureMap(config, textures);
+  var textureMap = new TextureMap(config, textures);
   textureMap.mount(scene);
   this._textureMaps.push(textureMap);
   return textureMap;
@@ -34,6 +34,33 @@ TextureMapManager.prototype._createTextureMap = function (config, textures, scen
  */
 TextureMapManager.prototype.drawTile = function (x, y, terrain) {
   this._background.drawTile(x, y, terrain);
+  for (var i = x - 1; i <= x + 1; ++i) {
+    for (var j = y + 1; j >= y - 1; --j) {
+      if(this._background.getTexture(i, j)){
+        //this._drawTransitions(i, j);
+      }
+    }
+  }
+};
+
+TextureMapManager.prototype._drawTransitions = function (x, y) {
+  var transitions = this._getTransitions(x, y);
+  for(var edgeTransition in transitions.edges){
+    if(transitions.edges.hasOwnProperty(edgeTransition)){
+      var edge = transitions.edges[edgeTransition];
+      if(edge > 0){
+        this._background.drawTile(x, y, edgeTransition, edge);
+      }
+    }
+  }
+  for(var vertexTransition in transitions.vertices){
+    if(transitions.vertices.hasOwnProperty(vertexTransition)){
+      var vertex = transitions.vertices[vertexTransition];
+      if(vertex > 0){
+        this._background.drawTile(x, y, vertexTransition, vertex);
+      }
+    }
+  }
 };
 
 /**
@@ -54,10 +81,10 @@ TextureMapManager.prototype._getTransitions = function (x, y) {
   var centerTexture = this._background.getTexture(x, y);
 
   var edgeNeighbours = [
-    {x: x - 1, y: y,     index: X},
-    {x: x    , y: y + 1, index: Y},
-    {x: x + 1, y: y,     index: W},
-    {x: x    , y: y - 1, index: Z}
+    {x: x - 1, y: y, index: X},
+    {x: x, y: y + 1, index: Y},
+    {x: x + 1, y: y, index: W},
+    {x: x, y: y - 1, index: Z}
   ];
   transitions.edges = this._getNeighbourTransitionIndices(centerTexture, edgeNeighbours);
 
@@ -92,11 +119,11 @@ TextureMapManager.prototype._getTransitions = function (x, y) {
  */
 TextureMapManager.prototype._getNeighbourTransitionIndices = function (centerTexture, neighbours) {
   var transitions = {};
-  for(var i=0; i<neighbours.length; ++i){
+  for (var i = 0; i < neighbours.length; ++i) {
     var neighbour = neighbours[i];
     var neighbourTexture = this._background.getTexture(neighbour.x, neighbour.y);
-    if(neighbourTexture && neighbourTexture.transitional && neighbourTexture.precedence > centerTexture.precedence){
-      if(!transitions.hasOwnProperty(neighbourTexture.type)){
+    if (neighbourTexture && neighbourTexture.transitional && neighbourTexture.precedence > centerTexture.precedence) {
+      if (!transitions.hasOwnProperty(neighbourTexture.type)) {
         transitions[neighbourTexture.type] = 0;
       }
       transitions[neighbourTexture.type] |= neighbours[i].index;
@@ -118,10 +145,10 @@ TextureMapManager.prototype._getNeighbourTransitionIndices = function (centerTex
  * @private
  */
 TextureMapManager.prototype._filterVertexTransitions = function (vertexFilter, transitions) {
-  for(var type in transitions.edges){
-    if(transitions.edges.hasOwnProperty(type)){
+  for (var type in transitions.edges) {
+    if (transitions.edges.hasOwnProperty(type)) {
       var vertices = transitions.vertices[type];
-      if(vertices){
+      if (vertices) {
         var edge = transitions.edges[type];
         transitions.vertices[type] &= this._getVertexMask(vertexFilter, edge);
       }
@@ -129,12 +156,12 @@ TextureMapManager.prototype._filterVertexTransitions = function (vertexFilter, t
   }
 };
 
-TextureMapManager.prototype._getVertexMask = function (vertexFilter, edge){
+TextureMapManager.prototype._getVertexMask = function (vertexFilter, edge) {
   var vertexMask = 15; //[1111]
-  for(var prop in vertexFilter){
-    if(vertexFilter.hasOwnProperty(prop)){
+  for (var prop in vertexFilter) {
+    if (vertexFilter.hasOwnProperty(prop)) {
       var filter = vertexFilter[prop];
-      if(filter.edge & edge){
+      if (filter.edge & edge) {
         vertexMask &= filter.mask;
       }
     }
@@ -146,6 +173,6 @@ TextureMapManager.prototype._getVertexMask = function (vertexFilter, edge){
 /**
  * @returns {IgePoint}
  */
-TextureMapManager.prototype.mouseToTile = function(){
+TextureMapManager.prototype.mouseToTile = function () {
   return this._background.mouseToTile();
 };

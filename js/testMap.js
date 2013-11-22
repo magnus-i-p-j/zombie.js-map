@@ -9,7 +9,7 @@ var textures = [
   {
     type: 'grass',
     uri: '../img/grass.png',
-    transitional: false,
+    transitional: true,
     precedence: 1
   }
 ];
@@ -20,17 +20,17 @@ map.claim('target');
 
 var drawATile = function () {
   console.log('map.drawTile');
-  map.drawTile(0, 0, 'grass');
+  map.drawTile(0, 0, 'water');
 };
 
-map.drawTile(-1, 1, 'water');
+map.drawTile(-1, 1, 'grass');
 map.drawTile(0, 1, 'water');
 map.drawTile(1, 1, 'water');
-map.drawTile(1, 0, 'water');
+map.drawTile(1, 0, 'grass');
 map.drawTile(-1, 0, 'water');
 map.drawTile(-1, -1, 'water');
-map.drawTile(0, -1, 'water');
-map.drawTile(1, -1, 'water');
+map.drawTile(0, -1, 'grass');
+map.drawTile(1, -1, 'grass');
 
 
 

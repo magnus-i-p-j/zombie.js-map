@@ -153,7 +153,11 @@ IsogenicMap.prototype._loadTextures = function (textures) {
   var result = [];
   for (var i=0; i<textures.length; ++i) {
     var texture = /** @type{igeTextureDefinition} */ textures[i];
-    texture.igeTexture = new IgeTexture(texture.uri);
+    if(texture.transitional){
+      texture.igeTexture = new IgeCellSheet(texture.uri, 17, 2);
+    }else{
+      texture.igeTexture = new IgeTexture(texture.uri);
+    }
     result.push(texture);
   }
   return result;
