@@ -1,39 +1,29 @@
 /**
  * @param {mapConfig} config
- * @param {Object.<string,IgeTexture>} textureFromTerrain
- * @param {IgeScene2d} mainScene
+ * @param {Array.<igeTextureDefinition>} textures
+ * @param {IgeScene2d} scene
  * @constructor
  */
-var TextureMapManager = function (config, textureFromTerrain, mainScene) {
+var TextureMapManager = function (config, textures, scene) {
   this._config = config;
-  this._background = this._createTextureMap(this._config, mainScene);
+  this._textures = textures;
+  this._textureMaps = [];
 
-  this._backgroundIndexFromTerrain = this._initTextures(this._background, textureFromTerrain);
+  this._background = this._createTextureMap(config, textures, scene);
+  this._transitions = this._createTextureMap(config, textures, scene);
 };
 
 /**
- * @param {IgeTextureMap} textureMap
- * @param {Object.<string,IgeTexture>} textureFromTerrain
- * @returns {Object.<string, number>}
+ * @param {mapConfig} config
+ * @param {Array.<igeTextureDefinition>} textures
+ * @param {IgeScene2d} scene
+ * @returns {TextureMap}
  * @private
  */
-TextureMapManager.prototype._initTextures = function (textureMap, textureFromTerrain) {
-  var ret = {};
-  for (var terrain in textureFromTerrain) {
-    if (textureFromTerrain.hasOwnProperty(terrain)) {
-      ret[terrain] = textureMap.addTexture(textureFromTerrain[terrain]);
-    }
-  }
-  return ret;
-};
-
-TextureMapManager.prototype._createTextureMap = function (config, mainScene) {
-  var textureMap = new IgeTextureMap();
-  textureMap.depth(0);
-  textureMap.tileWidth(config.tileSize);
-  textureMap.tileHeight(config.tileSize);
-  textureMap.autoSection(5);
-  textureMap.mount(mainScene);
+TextureMapManager.prototype._createTextureMap = function (config, textures, scene) {
+  var textureMap  = new TextureMap(config, textures);
+  textureMap.mount(scene);
+  this._textureMaps.push(textureMap);
   return textureMap;
 };
 
@@ -43,9 +33,15 @@ TextureMapManager.prototype._createTextureMap = function (config, mainScene) {
  * @param {string} terrain
  */
 TextureMapManager.prototype.drawTile = function (x, y, terrain) {
-  var texIndex = this._backgroundIndexFromTerrain[terrain];
-  this._background.cacheForceFrame();
-  this._background.paintTile(x, y, texIndex, 1);
+  this._background.drawTile(x, y, terrain);
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * @private
+ */
+TextureMapManager.prototype._getTransitions = function (x, y) {
 
 };
 

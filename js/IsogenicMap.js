@@ -1,7 +1,7 @@
 /**
  * @implements IMap
  * @param {mapConfig} config
- * @param {textureMap} textures
+ * @param {Array.<textureDefinition>} textures
  * @constructor
  */
 var IsogenicMap = function (config, textures) {
@@ -11,7 +11,7 @@ var IsogenicMap = function (config, textures) {
   this._mapManager = null;
   this._tileDrawQueue = [];
   this._ige = new IgeEngine();
-  this._textureFromTerrain = this._initTextures(textures);
+  this._textures = this._loadTextures(textures);
 
   this._onTileFocused = function(){console.log('focus');};
   this._onTileContext = function(){console.log('context');};
@@ -114,7 +114,7 @@ IsogenicMap.prototype._startIsogenic = function () {
   this._ige.start(function (success) {
     if (success) {
       self._createMainScene();
-      self._mapManager = new TextureMapManager(self._config, self._textureFromTerrain, self._mainScene);
+      self._mapManager = new TextureMapManager(self._config, self._textures, self._mainScene);
       for(var i=0; i<self._tileDrawQueue.length; ++i){
         self._mapManager.drawTile(
           self._tileDrawQueue[i].x,
@@ -145,14 +145,16 @@ IsogenicMap.prototype._createMainScene = function () {
 };
 
 /**
- * @param {textureMap} textures
- * @returns {{}}
+ * @param {Array.<textureDefinition>} textures
+ * @returns {Array.<igeTextureDefinition>}
  * @private
  */
-IsogenicMap.prototype._initTextures = function (textures) {
-  var ret = {};
+IsogenicMap.prototype._loadTextures = function (textures) {
+  var result = [];
   for (var i=0; i<textures.length; ++i) {
-    ret[textures[i].type] = new IgeTexture(textures[i].uri);
+    var texture = /** @type{igeTextureDefinition} */ textures[i];
+    texture.igeTexture = new IgeTexture(texture.uri);
+    result.push(texture);
   }
-  return ret;
+  return result;
 };

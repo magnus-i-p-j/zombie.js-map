@@ -13,9 +13,20 @@ mapConfig;
  *  precedence: number
  * }}
  */
-texture;
+textureDefinition;
 
 /**
- * @typedef {Array.<texture>}
+ * @typedef {{
+ *  type: string,
+ *  uri: string
+ *  transitional: boolean,
+ *  precedence: number,
+ *  igeTexture: IgeTexture
+ * }}
+ */
+igeTextureDefinition;
+
+/**
+ * @typedef {Array.<textureDefinition>}
  */
 textureMap;
