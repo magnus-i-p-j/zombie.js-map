@@ -33,6 +33,13 @@ TextureMap.prototype.mount = function(scene){
 };
 
 /**
+ * @returns {IgePoint}
+ */
+TextureMap.prototype.mouseToTile = function(){
+  return this._textureMap.mouseToTile();
+};
+
+/**
  * @param {number} x
  * @param {number} y
  * @param {string} terrain
