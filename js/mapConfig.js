@@ -7,20 +7,18 @@ mapConfig;
 
 /**
  * @typedef {{
+ *  name: string,
  *  type: string,
  *  uri: string
- *  transitional: boolean,
- *  precedence: number
  * }}
  */
 textureDefinition;
 
 /**
  * @typedef {{
+ *  name: string,
  *  type: string,
  *  uri: string
- *  transitional: boolean,
- *  precedence: number,
  *  igeTexture: IgeTexture
  * }}
  */

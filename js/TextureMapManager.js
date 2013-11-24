@@ -1,17 +1,20 @@
 /**
  * @param {mapConfig} config
- * @param {Array.<igeTextureDefinition>} textures
+ * @param {Array.<TileLayer>} layers
  * @param {IgeScene2d} scene
  * @constructor
  */
-var TextureMapManager = function (config, textures, scene) {
+var TextureMapManager = function (config, layers, scene) {
   this._config = config;
-  this._textures = textures;
+  this._layers = layers;
   this._textureMaps = [];
 
-  this._background = this._createTextureMap(config, textures, scene, 10);
-  this._edgeTransitions = this._createTextureMap(config, textures, scene, 11);
-  this._vertexTransitions = this._createTextureMap(config, textures, scene, 11);
+  //TODO: Start using TileLayers, let them create the IgeTextureMaps...
+  //TODO:  Depth is === index in array.
+
+  this._background = this._createTextureMap(config, layers, scene, 10);
+  this._edgeTransitions = this._createTextureMap(config, layers, scene, 11);
+  this._vertexTransitions = this._createTextureMap(config, layers, scene, 11);
 };
 
 /**

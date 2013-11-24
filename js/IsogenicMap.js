@@ -11,7 +11,7 @@ var IsogenicMap = function (config, textures) {
   this._mapManager = null;
   this._tileDrawQueue = [];
   this._ige = new IgeEngine();
-  this._textures = this._loadTextures(textures);
+  this._layers = this._loadTextures(textures);
 
   this._onTileFocused = function(){console.log('focus');};
   this._onTileContext = function(){console.log('context');};
@@ -114,7 +114,7 @@ IsogenicMap.prototype._startIsogenic = function () {
   this._ige.start(function (success) {
     if (success) {
       self._createMainScene();
-      self._mapManager = new TextureMapManager(self._config, self._textures, self._mainScene);
+      self._mapManager = new TextureMapManager(self._config, self._layers, self._mainScene);
       for(var i=0; i<self._tileDrawQueue.length; ++i){
         self._mapManager.drawTile(
           self._tileDrawQueue[i].x,
@@ -152,13 +152,9 @@ IsogenicMap.prototype._createMainScene = function () {
 IsogenicMap.prototype._loadTextures = function (textures) {
   var result = [];
   for (var i=0; i<textures.length; ++i) {
-    var texture = /** @type{igeTextureDefinition} */ textures[i];
-    if(texture.transitional){
-      texture.igeTexture = new IgeCellSheet(texture.uri, 17, 2);
-    }else{
-      texture.igeTexture = new IgeTexture(texture.uri);
-    }
-    result.push(texture);
+    var layer = new TileLayer(textures[i]);
+    layer.loadTextures();
+    result.push(layer);
   }
   return result;
 };
