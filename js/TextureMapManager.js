@@ -9,8 +9,9 @@ var TextureMapManager = function (config, textures, scene) {
   this._textures = textures;
   this._textureMaps = [];
 
-  this._background = this._createTextureMap(config, textures, scene);
-  this._transitions = this._createTextureMap(config, textures, scene);
+  this._background = this._createTextureMap(config, textures, scene, 10);
+  this._edgeTransitions = this._createTextureMap(config, textures, scene, 11);
+  this._vertexTransitions = this._createTextureMap(config, textures, scene, 11);
 };
 
 /**
@@ -20,8 +21,8 @@ var TextureMapManager = function (config, textures, scene) {
  * @returns {TextureMap}
  * @private
  */
-TextureMapManager.prototype._createTextureMap = function (config, textures, scene) {
-  var textureMap = new TextureMap(config, textures);
+TextureMapManager.prototype._createTextureMap = function (config, textures, scene, depth) {
+  var textureMap = new TextureMap(config, textures, depth);
   textureMap.mount(scene);
   this._textureMaps.push(textureMap);
   return textureMap;
@@ -37,7 +38,7 @@ TextureMapManager.prototype.drawTile = function (x, y, terrain) {
   for (var i = x - 1; i <= x + 1; ++i) {
     for (var j = y + 1; j >= y - 1; --j) {
       if(this._background.getTexture(i, j)){
-        //this._drawTransitions(i, j);
+        this._drawTransitions(i, j);
       }
     }
   }
@@ -49,7 +50,9 @@ TextureMapManager.prototype._drawTransitions = function (x, y) {
     if(transitions.edges.hasOwnProperty(edgeTransition)){
       var edge = transitions.edges[edgeTransition];
       if(edge > 0){
-        this._background.drawTile(x, y, edgeTransition, edge);
+        //var background = this._background.getTexture(neighbour.x, neighbour.y);
+        //this._background.drawTile(x, y, background);
+        this._edgeTransitions.drawTile(x, y, edgeTransition, edge + 2);
       }
     }
   }
@@ -57,7 +60,7 @@ TextureMapManager.prototype._drawTransitions = function (x, y) {
     if(transitions.vertices.hasOwnProperty(vertexTransition)){
       var vertex = transitions.vertices[vertexTransition];
       if(vertex > 0){
-        this._background.drawTile(x, y, vertexTransition, vertex);
+        this._vertexTransitions.drawTile(x, y, vertexTransition, vertex + 19);
       }
     }
   }
@@ -82,17 +85,17 @@ TextureMapManager.prototype._getTransitions = function (x, y) {
 
   var edgeNeighbours = [
     {x: x - 1, y: y, index: X},
-    {x: x, y: y + 1, index: Y},
+    {x: x, y: y - 1, index: Y},
     {x: x + 1, y: y, index: W},
-    {x: x, y: y - 1, index: Z}
+    {x: x, y: y + 1, index: Z}
   ];
   transitions.edges = this._getNeighbourTransitionIndices(centerTexture, edgeNeighbours);
 
   var vertexNeighbours = [
-    {x: x - 1, y: y + 1, index: X},
-    {x: x + 1, y: y + 1, index: Y},
-    {x: x + 1, y: y - 1, index: W},
-    {x: x - 1, y: y - 1, index: Z}
+    {x: x - 1, y: y - 1, index: X},
+    {x: x + 1, y: y - 1, index: Y},
+    {x: x + 1, y: y + 1, index: W},
+    {x: x - 1, y: y + 1, index: Z}
   ];
   transitions.vertices = this._getNeighbourTransitionIndices(centerTexture, vertexNeighbours);
 

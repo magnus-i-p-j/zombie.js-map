@@ -3,9 +3,9 @@
  * @param {mapConfig} config
  * @param {Array.<igeTextureDefinition>} textures
  */
-var TextureMap = function(config, textures){
+var TextureMap = function(config, textures, depth){
   this._textureMap = new IgeTextureMap();
-  this._textureMap.depth(0);
+  this._textureMap.depth(depth);
   this._textureMap.tileWidth(config.tileSize);
   this._textureMap.tileHeight(config.tileSize);
   this._textureMap.autoSection(5);
