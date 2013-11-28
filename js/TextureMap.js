@@ -16,7 +16,6 @@ var TextureMap = function(config, textures, depth){
 
 /**
  * @param {Array.<igeTextureDefinition>} textures
- * @returns {Object.<string, number>}
  * @private
  */
 TextureMap.prototype._initTextures = function (textures) {
