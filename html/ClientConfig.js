@@ -1,9 +1,9 @@
 var igeClientConfig = {
   include: [
     '../js/IsogenicMap.js',
-    '../js/TextureMapManager.js',
-    '../js/testMap.js',
-    '../js/TextureMap.js'
+    '../js/SingleTileLayer.js',
+    '../js/TransitionTileLayer.js',
+    '../js/testMap.js'
   ]
 };
 

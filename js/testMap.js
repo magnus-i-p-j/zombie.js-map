@@ -1,36 +1,57 @@
 var config = {};
-var textures = [
-  {
-    type: 'water',
-    uri: '../img/water.png',
-    transitional: false,
-    precedence: 0
-  },
-  {
-    type: 'grass',
-    uri: '../img/grass.png',
-    transitional: true,
-    precedence: 1
-  }
+var textures =
+  [
+    {
+      "name": "water",
+      "type": "single",
+      "uri": "../img/water.png"
+    },
+    {
+      "name": "grass",
+      "type": "transition",
+      "uri": "../img/grass.png"
+    }
 ];
 
-var map = new IsogenicMap(/** @type {mapConfig} */ config, /** @type {textureMap} */ textures);
+var isogenicMap = new IsogenicMap(config, textures);
 
-map.claim('target');
+isogenicMap.claim('target');
 
 var drawATile = function () {
   console.log('map.drawTile');
-  map.drawTile(0, 0, 'water');
+  drawTile(0, 0);
 };
 
-map.drawTile(-1, 1, 'grass');
-map.drawTile(0, 1, 'water');
-map.drawTile(1, 1, 'water');
-map.drawTile(1, 0, 'grass');
-map.drawTile(-1, 0, 'water');
-map.drawTile(-1, -1, 'water');
-map.drawTile(0, -1, 'grass');
-map.drawTile(1, -1, 'grass');
+var map = [
+  ['grass','grass','grass','grass','grass'],
+  ['grass','water','grass','grass','grass'],
+  ['grass','water','grass','water','grass'],
+  ['grass','grass','water','grass','grass'],
+  ['grass','grass','grass','grass','grass']
+];
+
+function getAdjacent(x, y, map){
+  return [
+    map[y]    [x - 1],
+    map[y - 1][x - 1],
+    map[y - 1][x]    ,
+    map[y - 1][x + 1],
+    map[y]    [x + 1],
+    map[y + 1][x + 1],
+    map[y + 1][x]    ,
+    map[y + 1][x -1]
+  ];
+};
+
+function drawTile(x, y, adjacent){
+  isogenicMap.drawTile(x, y, adjacent[y + 2][x +2], getAdjacent(x + 2, y + 2, adjacent));
+}
+
+for(var y=-1; y<=1; ++y){
+  for(var x=-1; x<=1; ++x){
+    drawTile(x, y, map);
+  }
+}
 
 
 

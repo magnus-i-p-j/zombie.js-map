@@ -57,22 +57,21 @@ TransitionTileLayer.prototype.loadTextures = function () {
  * @param {Array.<string>} adjacent
  */
 TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
-  var type = this._definition.type;
-  if (terrain === type) {
+  var name = this._definition.name;
+  if (terrain === name) {
     this._edges.paintTile(x, y, this._index, 1);
     this._vertices.clearTile(x, y);
   } else {
-
     var edgeIndex = 0;
     for (var i = 0; i < 8; i += 2) {
-      if (adjacent[i] === type) {
+      if (adjacent[i] === name) {
         edgeIndex |= Math.pow(2, i / 2);
       }
     }
 
     var vertexIndex = 0;
     for (i = 1; i < 8; i += 2) {
-      if (adjacent[i - 1] !== type && adjacent[(i + 1) % 8] !== type && adjacent[i] !== type) {
+      if (adjacent[i - 1] !== name && adjacent[(i + 1) % 8] !== name && adjacent[i] !== name) {
         vertexIndex |= Math.pow(2, (i - 1) / 2);
       }
     }

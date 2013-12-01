@@ -10,8 +10,9 @@ ITileLayer.prototype.loadTextures = function () {};
  * @param {number} x
  * @param {number} y
  * @param {string} terrain
+ * @param {Array.<string>} adjacent
  */
-ITileLayer.prototype.drawTile = function (x, y, terrain) {};
+ITileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {};
 
 /**
  * @param {IgeScene2d} scene

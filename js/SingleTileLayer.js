@@ -32,7 +32,7 @@ SingleTileLayer.prototype.mouseToTile = function () {
 };
 
 SingleTileLayer.prototype.loadTextures = function () {
-  this._texture = new IgeTexture(texture.uri);
+  this._texture = new IgeTexture( this._definition.uri);
   this._index = this._textureMap.addTexture(this._texture);
 };
 
@@ -43,7 +43,7 @@ SingleTileLayer.prototype.loadTextures = function () {
  * @param {Array.<string>} adjacent
  */
 SingleTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
-  if (terrain === this._definition.type) {
+  if (terrain === this._definition.name) {
     this._textureMap.paintTile(x, y, this._index, 1);
   } else {
     this._textureMap.clearTile(x, y);
