@@ -23,8 +23,9 @@ IMap.prototype.claim = function (elementId) {};
  * @param {number} x
  * @param {number} y
  * @param {string} terrain
+ * @param {Array.<string>} adjacent
  */
-IMap.prototype.drawTile = function (x, y, terrain) {};
+IMap.prototype.drawTile = function (x, y, terrain, adjacent) {};
 
 /**
  * @param {function(mapEvent)} callback
