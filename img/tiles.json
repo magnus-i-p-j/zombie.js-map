@@ -1,0 +1,12 @@
+[
+  {
+    "name": "water",
+    "type": "single",
+    "uri": "water.png"
+  },
+  {
+    "name": "grass",
+    "type": "transition",
+    "uri": "grass.png"
+  }
+]

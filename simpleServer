@@ -20,5 +20,5 @@ Handler = MyHTTPRequestHandler
 httpd = SocketServer.TCPServer(("", PORT), Handler)
 
 print "serving at localhost:" + str(PORT)
-print "http://localhost:" + str(PORT) + "/html/testmap.html"
+print "http://localhost:" + str(PORT) + "/html/testMap.html"
 httpd.serve_forever()

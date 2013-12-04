@@ -1,17 +1,20 @@
 /**
  * @implements IMap
  * @param {mapConfig} config
- * @param {textureMap} terrainUris
+ * @param {Array.<textureDefinition>} textures
  * @constructor
  */
-var IsogenicMap = function (config, terrainUris) {
+var IsogenicMap = function (config, textures) {
   this._setDefaults(config);
   this._config = config;
   this._mainScene = null;
-  this._mapManager = null;
   this._tileDrawQueue = [];
   this._ige = new IgeEngine();
-  this._textureFromTerrain = this._initTextures(terrainUris);
+  /**
+   * @type {Array.<ITileLayer>}
+   * @private
+   */
+  this._layers = this._createTileLayers(textures);
 
   this._onTileFocused = function(){console.log('focus');};
   this._onTileContext = function(){console.log('context');};
@@ -30,16 +33,29 @@ IsogenicMap.prototype._setDefaults = function (config) {
  * @param {number} y
  * @param {string} terrain
  */
-IsogenicMap.prototype.drawTile = function (x, y, terrain) {
-  if(!this._mapManager){
+IsogenicMap.prototype.drawTile = function (x, y, terrain, adjacent) {
+  if(!this._tileDrawQueue){
      this._tileDrawQueue.push(
        {
-         x: x, y:y, terrain: terrain
+         x: x, y:y, terrain: terrain, adjacent: adjacent
        }
      );
   }
   else{
-    this._mapManager.drawTile(x, y, terrain);
+    this._drawTile(x, y, terrain, adjacent);
+  }
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {string} terrain
+ * @param {Array.<string>} adjacent
+ * @private
+ */
+IsogenicMap.prototype._drawTile = function (x, y, terrain, adjacent) {
+  for(var i=0; i<this._layers.length; ++i){
+    this._layers[i].drawTile(x, y, terrain, adjacent);
   }
 };
 
@@ -78,7 +94,7 @@ IsogenicMap.prototype.onMouseClick = function(evt){
  * @param {function(mapEvent)} callback
  */
 IsogenicMap.prototype.raiseMapEvent = function (evt, callback) {
-  var point = this._mapManager.mouseToTile();
+  var point = this._layers[0].mouseToTile();
   console.log(point);
   if(this.vp){
     console.log(this.vp.mousePosWorld());
@@ -114,13 +130,17 @@ IsogenicMap.prototype._startIsogenic = function () {
   this._ige.start(function (success) {
     if (success) {
       self._createMainScene();
-      self._mapManager = new TextureMapManager(self._config, self._textureFromTerrain, self._mainScene);
-      for(var i=0; i<self._tileDrawQueue.length; ++i){
-        self._mapManager.drawTile(
+      for(var i=0; i<self._layers.length; ++i){
+        self._layers[i].mount(self._mainScene, i * 10);
+      }
+      for(i=0; i<self._tileDrawQueue.length; ++i){
+        self._drawTile(
           self._tileDrawQueue[i].x,
           self._tileDrawQueue[i].y,
-          self._tileDrawQueue[i].terrain);
+          self._tileDrawQueue[i].terrain,
+          self._tileDrawQueue[i].adjacent);
       }
+      self._tileDrawQueue = false;
     }
   });
 };
@@ -141,20 +161,27 @@ IsogenicMap.prototype._createMainScene = function () {
   vp.autoSize(true);
   vp.scene(this._mainScene);
   vp.mount(this._ige);
-
 };
 
 /**
- * @param terrainUris
- * @returns {{}}
+ * @param {Array.<textureDefinition>} textures
+ * @returns {Array.<ITileLayer>}
  * @private
  */
-IsogenicMap.prototype._initTextures = function (terrainUris) {
-  var ret = {};
-  for (var index in terrainUris) {
-    if (terrainUris.hasOwnProperty(index)) {
-      ret[index] = new IgeTexture(terrainUris[index]);
+IsogenicMap.prototype._createTileLayers = function (textures) {
+  var result = [];
+  for (var i=0; i<textures.length; ++i) {
+    var layer = null;
+    if(textures[i].type === 'single' ){
+      layer = new SingleTileLayer(this._config, textures[i]);
+    }else if(textures[i].type === 'transition' ){
+      layer = new TransitionTileLayer(this._config, textures[i]);
     }
+    else{
+      throw 'Unknown texture type.';
+    }
+    layer.loadTextures();
+    result.push(layer);
   }
-  return ret;
+  return result;
 };
