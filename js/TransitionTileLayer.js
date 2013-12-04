@@ -7,7 +7,8 @@
 var TransitionTileLayer = function (config, definition) {
   this._definition = definition;
   this._texture = null;
-
+  this._edgeTextureIndex = null;
+  this._vertexTextureIndex = null;
   this._edges = this._createTextureMap(config);
   this._vertices = this._createTextureMap(config);
 };
@@ -48,6 +49,8 @@ TransitionTileLayer.prototype.mouseToTile = function () {
 
 TransitionTileLayer.prototype.loadTextures = function () {
   this._texture = new IgeCellSheet(this._definition.uri, 8, 4);
+  this._edgeTextureIndex = this._edges.addTexture(this._texture);
+  this._vertexTextureIndex = this._vertices.addTexture(this._texture);
 };
 
 /**
@@ -59,7 +62,7 @@ TransitionTileLayer.prototype.loadTextures = function () {
 TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
   var name = this._definition.name;
   if (terrain === name) {
-    this._edges.paintTile(x, y, this._index, 1);
+    this._edges.paintTile(x, y, this._edgeTextureIndex, 1);
     this._vertices.clearTile(x, y);
   } else {
     var edgeIndex = 0;
@@ -71,24 +74,23 @@ TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
 
     var vertexIndex = 0;
     for (i = 1; i < 8; i += 2) {
-      if (adjacent[i - 1] !== name && adjacent[(i + 1) % 8] !== name && adjacent[i] !== name) {
+      if ((adjacent[i - 1] !== name ) && (adjacent[(i + 1) % 8] !== name) && (adjacent[i] === name)) {
         vertexIndex |= Math.pow(2, (i - 1) / 2);
       }
     }
 
-    if(edgeIndex + vertexIndex){
-      if(edgeIndex){
-        this._edges.paintTile(x, y, this._index, edgeIndex + 1);
-      }
-      else{
+    if (edgeIndex + vertexIndex) {
+      if (edgeIndex) {
+        this._edges.paintTile(x, y, this._edgeTextureIndex, edgeIndex + 1);
+      } else {
         this._edges.clearTile(x, y);
       }
-      if(vertexIndex){
-        this._vertices.paintTile(x, y, this._index, vertexIndex + 17);
-      }else{
+      if (vertexIndex) {
+        this._vertices.paintTile(x, y, this._vertexTextureIndex, vertexIndex + 17);
+      } else {
         this._vertices.clearTile(x, y);
       }
-    }else{
+    } else {
       this._vertices.clearTile(x, y);
       this._edges.clearTile(x, y);
     }
