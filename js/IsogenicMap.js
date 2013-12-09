@@ -55,7 +55,7 @@ IsogenicMap.prototype.drawTile = function (x, y, terrain, adjacent) {
  */
 IsogenicMap.prototype._drawTile = function (x, y, terrain, adjacent) {
   for(var i=0; i<this._layers.length; ++i){
-    this._layers[i].drawTile(x, y, terrain, adjacent);
+    this._layers[i].drawTile(x, -y, terrain, adjacent);
   }
 };
 

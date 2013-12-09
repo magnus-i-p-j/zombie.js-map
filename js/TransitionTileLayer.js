@@ -86,7 +86,7 @@ TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
         this._edges.clearTile(x, y);
       }
       if (vertexIndex) {
-        this._vertices.paintTile(x, y, this._vertexTextureIndex, vertexIndex + 17);
+        this._vertices.paintTile(x, y, this._vertexTextureIndex, vertexIndex + 16);
       } else {
         this._vertices.clearTile(x, y);
       }
