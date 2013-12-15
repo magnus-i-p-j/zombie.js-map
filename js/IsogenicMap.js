@@ -101,7 +101,7 @@ IsogenicMap.prototype.raiseMapEvent = function (evt, callback) {
   }
   callback({
     'tileX': /** @type {number} */ point.x,
-    'tileY': /** @type {number} */ point.y,
+    'tileY': -1 * /** @type {number} */ point.y,
     'clientX': /** @type {number} */ evt.clientX,
     'clientY': /** @type {number} */ evt.clientY
   });
