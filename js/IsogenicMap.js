@@ -29,9 +29,7 @@ IsogenicMap.prototype._setDefaults = function (config) {
 };
 
 /**
- * @param {number} x
- * @param {number} y
- * @param {string} terrain
+ * @inheritDoc
  */
 IsogenicMap.prototype.drawTile = function (x, y, terrain, adjacent) {
   if(!this._tileDrawQueue){
