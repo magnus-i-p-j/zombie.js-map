@@ -5,6 +5,10 @@
  * @constructor
  */
 var SingleTileLayer = function (config, definition) {
+  /**
+   * @type {textureDefinition}
+   * @private
+   */
   this._definition = definition;
   this._texture = null;
   this._index = null;
@@ -39,11 +43,11 @@ SingleTileLayer.prototype.loadTextures = function () {
 /**
  * @param {number} x
  * @param {number} y
- * @param {string} terrain,
- * @param {Array.<string>} adjacent
+ * @param {terrain} terrain
+ * @param {Array.<terrain>} adjacent
  */
 SingleTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
-  if (terrain === this._definition.name) {
+  if (terrain[this._definition.subtype] === this._definition.name) {
     this._textureMap.paintTile(x, y, this._index, 1);
   } else {
     this._textureMap.clearTile(x, y);

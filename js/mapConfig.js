@@ -10,6 +10,7 @@ mapConfig;
  *  name: string,
  *  type: string,
  *  uri: string
+ *  subtype: string
  * }}
  */
 textureDefinition;
