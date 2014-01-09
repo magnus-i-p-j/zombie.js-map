@@ -41,18 +41,18 @@ var map = [
 function getAdjacent(x, y, map){
   return [
     map[y]    [x - 1],
-    map[y + 1][x - 1],
-    map[y + 1][x]    ,
-    map[y + 1][x + 1],
-    map[y]    [x + 1],
-    map[y - 1][x + 1],
+    map[y - 1][x - 1],
     map[y - 1][x]    ,
-    map[y - 1][x -1]
+    map[y - 1][x + 1],
+    map[y]    [x + 1],
+    map[y + 1][x + 1],
+    map[y + 1][x]    ,
+    map[y + 1][x -1]
   ];
 }
 
 function drawTile(x, y, adjacent){
-  isogenicMap.drawTile(x, y, adjacent[y + 2][x +2], getAdjacent(x + 2, y + 2, adjacent));
+  isogenicMap.drawTile(x, y, adjacent[-y + 2][x +2], getAdjacent(x + 2, -y + 2, adjacent));
 }
 
 for(var y=-1; y<=1; ++y){
