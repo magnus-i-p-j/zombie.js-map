@@ -61,21 +61,21 @@ TransitionTileLayer.prototype.loadTextures = function () {
  */
 TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
   var name = this._definition.name;
-  var subtype = this._definition.subtype;
-  if (terrain[subtype] === name) {
+  var zone = this._definition.zone;
+  if (terrain[zone] === name) {
     this._edges.paintTile(x, y, this._edgeTextureIndex, 1);
     this._vertices.clearTile(x, y);
   } else {
     var edgeIndex = 0;
     for (var i = 0; i < 8; i += 2) {
-      if (adjacent[i][subtype] === name) {
+      if (adjacent[i][zone] === name) {
         edgeIndex |= Math.pow(2, i / 2);
       }
     }
 
     var vertexIndex = 0;
     for (i = 1; i < 8; i += 2) {
-      if ((adjacent[i - 1][subtype] !== name ) && (adjacent[(i + 1) % 8][subtype] !== name) && (adjacent[i][subtype] === name)) {
+      if ((adjacent[i - 1][zone] !== name ) && (adjacent[(i + 1) % 8][zone] !== name) && (adjacent[i][zone] === name)) {
         vertexIndex |= Math.pow(2, (i - 1) / 2);
       }
     }

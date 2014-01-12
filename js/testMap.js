@@ -5,19 +5,19 @@ var textures =
       "name": "water",
       "type": "single",
       "uri": "../img/water.png",
-	  "subtype":"base"
+	  "zone":"base"
     },
     {
       "name": "grass",
       "type": "transition",
       "uri": "../img/grass.png",
-	  "subtype":"base"
+	  "zone":"base"
     },
     {
       "name": "hut",
       "type": "single",
       "uri": "../img/hut.png",
-	  "subtype":"content"
+	  "zone":"content"
     }
 ];
 

@@ -47,7 +47,7 @@ SingleTileLayer.prototype.loadTextures = function () {
  * @param {Array.<terrain>} adjacent
  */
 SingleTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
-  if (terrain[this._definition.subtype] === this._definition.name) {
+  if (terrain[this._definition.zone] === this._definition.name) {
     this._textureMap.paintTile(x, y, this._index, 1);
   } else {
     this._textureMap.clearTile(x, y);
