@@ -1,5 +1,5 @@
 /**
- * @typedef:{{
+ * @typedef{{
  *  tileX: number,
  *  tileY: number,
  *  clientX: number,
@@ -9,7 +9,7 @@
 var mapEvent;
 
 /**
- * @typedef:{Object.<string, string>}
+ * @typedef{Object.<string, string>}
  */
 var terrain;
 
