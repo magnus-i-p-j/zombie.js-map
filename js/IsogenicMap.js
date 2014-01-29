@@ -16,8 +16,12 @@ var IsogenicMap = function (config, textures) {
    */
   this._layers = this._createTileLayers(textures);
 
-  this._onTileFocused = function(){console.log('focus');};
-  this._onTileContext = function(){console.log('context');};
+  this._onTileFocused = function () {
+    //console.log('focus');
+  };
+  this._onTileContext = function () {
+    //console.log('context');
+  };
 };
 
 /**
@@ -32,14 +36,14 @@ IsogenicMap.prototype._setDefaults = function (config) {
  * @inheritDoc
  */
 IsogenicMap.prototype.drawTile = function (x, y, terrain, adjacent) {
-  if(!this._tileDrawQueue){
-     this._tileDrawQueue.push(
-       {
-         x: x, y:y, terrain: terrain, adjacent: adjacent
-       }
-     );
+  if (this._tileDrawQueue) {
+    this._tileDrawQueue.push(
+      {
+        x: x, y: y, terrain: terrain, adjacent: adjacent
+      }
+    );
   }
-  else{
+  else {
     this._drawTile(x, y, terrain, adjacent);
   }
 };
@@ -52,7 +56,7 @@ IsogenicMap.prototype.drawTile = function (x, y, terrain, adjacent) {
  * @private
  */
 IsogenicMap.prototype._drawTile = function (x, y, terrain, adjacent) {
-  for(var i=0; i<this._layers.length; ++i){
+  for (var i = 0; i < this._layers.length; ++i) {
     this._layers[i].drawTile(x, -y, terrain, adjacent);
   }
 };
@@ -74,8 +78,8 @@ IsogenicMap.prototype.claim = function (elementId) {
 /**
  * @param {MouseEvent} evt
  */
-IsogenicMap.prototype.onMouseUp = function(evt){
-  if(evt.button === 2){
+IsogenicMap.prototype.onMouseUp = function (evt) {
+  if (evt.button === 2) {
     this.raiseMapEvent(evt, this._onTileContext);
   }
 };
@@ -83,7 +87,7 @@ IsogenicMap.prototype.onMouseUp = function(evt){
 /**
  * @param {MouseEvent} evt
  */
-IsogenicMap.prototype.onMouseClick = function(evt){
+IsogenicMap.prototype.onMouseClick = function (evt) {
   this.raiseMapEvent(evt, this._onTileFocused);
 };
 
@@ -93,10 +97,10 @@ IsogenicMap.prototype.onMouseClick = function(evt){
  */
 IsogenicMap.prototype.raiseMapEvent = function (evt, callback) {
   var point = this._layers[0].mouseToTile();
-  console.log(point);
-  if(this.vp){
-    console.log(this.vp.mousePosWorld());
-  }
+//  console.log(point);
+//  if (this.vp) {
+//    console.log(this.vp.mousePosWorld());
+//  }
   callback({
     'tileX': /** @type {number} */ point.x,
     'tileY': -1 * /** @type {number} */ point.y,
@@ -128,10 +132,10 @@ IsogenicMap.prototype._startIsogenic = function () {
   this._ige.start(function (success) {
     if (success) {
       self._createMainScene();
-      for(var i=0; i<self._layers.length; ++i){
+      for (var i = 0; i < self._layers.length; ++i) {
         self._layers[i].mount(self._mainScene, i * 10);
       }
-      for(i=0; i<self._tileDrawQueue.length; ++i){
+      for (i = 0; i < self._tileDrawQueue.length; ++i) {
         self._drawTile(
           self._tileDrawQueue[i].x,
           self._tileDrawQueue[i].y,
@@ -168,14 +172,14 @@ IsogenicMap.prototype._createMainScene = function () {
  */
 IsogenicMap.prototype._createTileLayers = function (textures) {
   var result = [];
-  for (var i=0; i<textures.length; ++i) {
+  for (var i = 0; i < textures.length; ++i) {
     var layer = null;
-    if(textures[i].type === 'single' ){
+    if (textures[i].type === 'single') {
       layer = new SingleTileLayer(this._config, textures[i]);
-    }else if(textures[i].type === 'transition' ){
+    } else if (textures[i].type === 'transition') {
       layer = new TransitionTileLayer(this._config, textures[i]);
     }
-    else{
+    else {
       throw 'Unknown texture type.';
     }
     layer.loadTextures();
