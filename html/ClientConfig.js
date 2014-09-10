@@ -3,6 +3,7 @@ var igeClientConfig = {
     '../js/IsogenicMap.js',
     '../js/SingleTileLayer.js',
     '../js/TransitionTileLayer.js',
+    '../js/TextLayer.js',
     '../js/testMap.js'
   ]
 };

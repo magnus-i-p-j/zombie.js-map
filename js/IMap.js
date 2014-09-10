@@ -33,6 +33,13 @@ IMap.prototype.claim = function (elementId) {};
 IMap.prototype.drawTile = function (x, y, terrain, adjacent) {};
 
 /**
+ * @param {number} x
+ * @param {number} y
+ * @param {Array.<string>} text
+ */
+IMap.prototype.drawText = function (x, y, text) {};
+
+/**
  * @param {function(mapEvent)} callback
  */
 IMap.prototype.onTileFocused = function(callback) {};

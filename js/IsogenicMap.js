@@ -22,6 +22,7 @@ var IsogenicMap = function (config, textures) {
   this._onTileContext = function () {
     //console.log('context');
   };
+
 };
 
 /**
@@ -46,6 +47,32 @@ IsogenicMap.prototype.drawTile = function (x, y, terrain, adjacent) {
   else {
     this._drawTile(x, y, terrain, adjacent);
   }
+};
+
+/**
+ * @inheritDoc
+ */
+IsogenicMap.prototype.drawText = function (x, y, text) {
+  if (this._tileDrawQueue) {
+    this._tileDrawQueue.push(
+      {
+        x: x, y: y, text: text
+      }
+    );
+  }
+  else {
+    this._drawText(x, y, text);
+  }
+};
+
+/**
+ * @param {number} x
+ * @param {number} y
+ * @param {Array.<string>} text
+ * @private
+ */
+IsogenicMap.prototype._drawText = function (x, y, text) {
+  this._textLayer.drawText(x, y, text);
 };
 
 /**
@@ -135,14 +162,26 @@ IsogenicMap.prototype._startIsogenic = function () {
       for (var i = 0; i < self._layers.length; ++i) {
         self._layers[i].mount(self._mainScene, i * 10);
       }
+      self._textLayer = new TextLayer(config);
+      self._textLayer.mount(self._mainScene, self._layers.length + 1);
+
       for (i = 0; i < self._tileDrawQueue.length; ++i) {
-        self._drawTile(
-          self._tileDrawQueue[i].x,
-          self._tileDrawQueue[i].y,
-          self._tileDrawQueue[i].terrain,
-          self._tileDrawQueue[i].adjacent);
+        if(self._tileDrawQueue[i].text) {
+          self._drawText(
+            self._tileDrawQueue[i].x,
+            self._tileDrawQueue[i].y,
+            self._tileDrawQueue[i].text
+          );
+        }else {
+          self._drawTile(
+            self._tileDrawQueue[i].x,
+            self._tileDrawQueue[i].y,
+            self._tileDrawQueue[i].terrain,
+            self._tileDrawQueue[i].adjacent);
+        }
       }
       self._tileDrawQueue = false;
+
     }
   });
 };

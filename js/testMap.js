@@ -10,7 +10,7 @@ var textures =
     {
       "name": "grass",
       "type": "transition",
-      "uri": "../img/grass.png",
+      "uri": "../img/grass5.png",
 	  "zone":"base"
     },
     {
@@ -55,9 +55,14 @@ function drawTile(x, y, adjacent){
   isogenicMap.drawTile(x, y, adjacent[-y + 2][x +2], getAdjacent(x + 2, -y + 2, adjacent));
 }
 
+function drawText(x, y, text){
+  isogenicMap.drawText(x, y, text);
+}
+
 for(var y=-1; y<=1; ++y){
   for(var x=-1; x<=1; ++x){
     drawTile(x, y, map);
+    drawText(x ,y, ["[" + x + ";" + y + "]"]);
   }
 }
 
