@@ -52,8 +52,8 @@ TextLayer.prototype._getTextEntity = function(x, y) {
   if(!fontEntity) {
     fontEntity = new IgeFontEntity()
       .depth(this._depth * 10)
-      .width(config.tileSize * 0.98)
-      .height(config.tileSize * 0.98)
+      .width(this._config.tileSize * 0.98)
+      .height(this._config.tileSize * 0.98)
       .textAlignX(0)
       .textAlignY(0)
       .colorOverlay('#ffffff')
