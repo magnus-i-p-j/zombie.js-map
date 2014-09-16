@@ -162,7 +162,7 @@ IsogenicMap.prototype._startIsogenic = function () {
       for (var i = 0; i < self._layers.length; ++i) {
         self._layers[i].mount(self._mainScene, i * 10);
       }
-      self._textLayer = new TextLayer(config);
+      self._textLayer = new TextLayer(self._config);
       self._textLayer.mount(self._mainScene, self._layers.length + 1);
 
       for (i = 0; i < self._tileDrawQueue.length; ++i) {
