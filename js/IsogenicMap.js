@@ -2,10 +2,12 @@
  * @implements IMap
  * @param {mapConfig} config
  * @param {Array.<textureDefinition>} textures
+ * @param {!function(number, number):number} tileVariationStrategy
  * @constructor
  */
-var IsogenicMap = function (config, textures) {
+var IsogenicMap = function (config, textures, tileVariationStrategy) {
   this._setDefaults(config);
+  this._tileVariationStrategy = tileVariationStrategy;
   this._config = config;
   this._mainScene = null;
   this._tileDrawQueue = [];
@@ -214,9 +216,9 @@ IsogenicMap.prototype._createTileLayers = function (textures) {
   for (var i = 0; i < textures.length; ++i) {
     var layer = null;
     if (textures[i].type === 'single') {
-      layer = new SingleTileLayer(this._config, textures[i], tileVariationStrategy);
+      layer = new SingleTileLayer(this._config, textures[i], this._tileVariationStrategy);
     } else if (textures[i].type === 'transition') {
-      layer = new TransitionTileLayer(this._config, textures[i], tileVariationStrategy);
+      layer = new TransitionTileLayer(this._config, textures[i], this._tileVariationStrategy);
     }
     else {
       throw 'Unknown texture type.';
@@ -225,8 +227,4 @@ IsogenicMap.prototype._createTileLayers = function (textures) {
     result.push(layer);
   }
   return result;
-};
-
-tileVariationStrategy = function(x, y) {
-  return Math.abs(x + y);
 };

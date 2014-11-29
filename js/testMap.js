@@ -42,7 +42,7 @@ var textures =
     }
   ];
 
-var isogenicMap = new IsogenicMap(config, textures);
+var isogenicMap = new IsogenicMap(config, textures, function(x, y){ return Math.abs(x + y) });
 
 isogenicMap.claim('target');
 
