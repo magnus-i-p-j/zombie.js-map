@@ -4,14 +4,16 @@
  * @implements ITileLayer
  * @constructor
  */
-var SingleTileLayer = function (config, definition) {
+var SingleTileLayer = function (config, definition, tileVariationStrategy) {
   /**
    * @type {textureDefinition}
    * @private
    */
   this._definition = definition;
-  this._texture = null;
-  this._index = null;
+
+  this._tileVariationStrategy = tileVariationStrategy;
+
+  this._textureIndices = [];
   this._textureMap = new IgeTextureMap();
 
   this._textureMap.tileWidth(config.tileSize);
@@ -36,8 +38,14 @@ SingleTileLayer.prototype.mouseToTile = function () {
 };
 
 SingleTileLayer.prototype.loadTextures = function () {
-  this._texture = new IgeTexture( this._definition.uri);
-  this._index = this._textureMap.addTexture(this._texture);
+  var textures = this._definition.textures;
+  for(var i=0; i<textures.length; ++i) {
+    var texture = new IgeTexture(textures[i].uri);
+    var index = this._textureMap.addTexture(texture);
+    for(var j = textures[i].weight; j > 0; --j) {
+      this._textureIndices.push(index);
+    }
+  }
 };
 
 /**
@@ -48,7 +56,9 @@ SingleTileLayer.prototype.loadTextures = function () {
  */
 SingleTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
   if (terrain[this._definition.zone] === this._definition.name) {
-    this._textureMap.paintTile(x, y, this._index, 1);
+    var index = this._tileVariationStrategy(x, y) % this._textureIndices.length;
+    this._textureMap.paintTile(x, y, this._textureIndices[index], 1);
+
   } else {
     this._textureMap.clearTile(x, y);
   }

@@ -214,9 +214,9 @@ IsogenicMap.prototype._createTileLayers = function (textures) {
   for (var i = 0; i < textures.length; ++i) {
     var layer = null;
     if (textures[i].type === 'single') {
-      layer = new SingleTileLayer(this._config, textures[i]);
+      layer = new SingleTileLayer(this._config, textures[i], tileVariationStrategy);
     } else if (textures[i].type === 'transition') {
-      layer = new TransitionTileLayer(this._config, textures[i]);
+      layer = new TransitionTileLayer(this._config, textures[i], tileVariationStrategy);
     }
     else {
       throw 'Unknown texture type.';
@@ -225,4 +225,8 @@ IsogenicMap.prototype._createTileLayers = function (textures) {
     result.push(layer);
   }
   return result;
+};
+
+tileVariationStrategy = function(x, y) {
+  return Math.abs(x + y);
 };

@@ -7,10 +7,19 @@ mapConfig;
 
 /**
  * @typedef {{
+ *  uri: string,
+ *  weight: number
+ * }}
+ */
+textureVariation;
+
+/**
+ * @typedef {{
  *  name: string,
  *  type: string,
  *  uri: string
- *  zone: string
+ *  zone: string,
+ *  textures: Array.<textureVariation>
  * }}
  */
 textureDefinition;

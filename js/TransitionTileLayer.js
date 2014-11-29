@@ -4,11 +4,13 @@
  * @implements ITileLayer
  * @constructor
  */
-var TransitionTileLayer = function (config, definition) {
+var TransitionTileLayer = function (config, definition, tileVariationStrategy) {
   this._definition = definition;
-  this._texture = null;
-  this._edgeTextureIndex = null;
-  this._vertexTextureIndex = null;
+  this._tileVariationStrategy = tileVariationStrategy;
+
+  this._edgeTextureIndices = [];
+  this._vertexTextureIndices = [];
+
   this._edges = this._createTextureMap(config);
   this._vertices = this._createTextureMap(config);
 };
@@ -48,9 +50,16 @@ TransitionTileLayer.prototype.mouseToTile = function () {
 };
 
 TransitionTileLayer.prototype.loadTextures = function () {
-  this._texture = new IgeCellSheet(this._definition.uri, 8, 4);
-  this._edgeTextureIndex = this._edges.addTexture(this._texture);
-  this._vertexTextureIndex = this._vertices.addTexture(this._texture);
+  var textures = this._definition.textures;
+  for(var i=0; i<textures.length; ++i) {
+    var texture = new IgeCellSheet(textures[i].uri, 8, 4);
+    var edgeTextureIndex = this._edges.addTexture(texture);
+    var vertexTextureIndex = this._vertices.addTexture(texture);
+    for(var j = textures[i].weight; j > 0; --j) {
+      this._edgeTextureIndices.push(edgeTextureIndex);
+      this._vertexTextureIndices.push(vertexTextureIndex);
+    }
+  }
 };
 
 /**
@@ -62,8 +71,11 @@ TransitionTileLayer.prototype.loadTextures = function () {
 TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
   var name = this._definition.name;
   var zone = this._definition.zone;
+
+  var variationIndex = this._tileVariationStrategy(x, y) % this._edgeTextureIndices.length;
+
   if (terrain[zone] === name) {
-    this._edges.paintTile(x, y, this._edgeTextureIndex, 1);
+    this._edges.paintTile(x, y, this._edgeTextureIndices[variationIndex], 1);
     this._vertices.clearTile(x, y);
   } else {
     var edgeIndex = 0;
@@ -82,12 +94,12 @@ TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
 
     if (edgeIndex + vertexIndex) {
       if (edgeIndex) {
-        this._edges.paintTile(x, y, this._edgeTextureIndex, edgeIndex + 1);
+        this._edges.paintTile(x, y, this._edgeTextureIndices[variationIndex], edgeIndex + 1);
       } else {
         this._edges.clearTile(x, y);
       }
       if (vertexIndex) {
-        this._vertices.paintTile(x, y, this._vertexTextureIndex, vertexIndex + 16);
+        this._vertices.paintTile(x, y, this._vertexTextureIndices[variationIndex], vertexIndex + 16);
       } else {
         this._vertices.clearTile(x, y);
       }
