@@ -4,9 +4,8 @@
  * @implements ITileLayer
  * @constructor
  */
-var TransitionTileLayer = function (config, definition, tileVariationStrategy) {
+var TransitionTileLayer = function (config, definition) {
   this._definition = definition;
-  this._tileVariationStrategy = tileVariationStrategy;
 
   this._edgeTextureIndices = [];
   this._vertexTextureIndices = [];
@@ -68,11 +67,11 @@ TransitionTileLayer.prototype.loadTextures = function () {
  * @param {string} terrain
  * @param {Array.<string>} adjacent
  */
-TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
+TransitionTileLayer.prototype.drawTile = function (x, y, terrain, adjacent, tileVariation) {
   var name = this._definition.name;
   var zone = this._definition.zone;
 
-  var variationIndex = this._tileVariationStrategy(x, y) % this._edgeTextureIndices.length;
+  var variationIndex = tileVariation % this._edgeTextureIndices.length;
 
   if (terrain[zone] === name) {
     this._edges.paintTile(x, y, this._edgeTextureIndices[variationIndex], 1);

@@ -85,8 +85,9 @@ IsogenicMap.prototype._drawText = function (x, y, text) {
  * @private
  */
 IsogenicMap.prototype._drawTile = function (x, y, terrain, adjacent) {
+  var tileVariation = this._tileVariationStrategy(x, y);
   for (var i = 0; i < this._layers.length; ++i) {
-    this._layers[i].drawTile(x, -y, terrain, adjacent);
+    this._layers[i].drawTile(x, -y, terrain, adjacent, tileVariation);
   }
 };
 

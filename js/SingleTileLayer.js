@@ -4,14 +4,12 @@
  * @implements ITileLayer
  * @constructor
  */
-var SingleTileLayer = function (config, definition, tileVariationStrategy) {
+var SingleTileLayer = function (config, definition) {
   /**
    * @type {textureDefinition}
    * @private
    */
   this._definition = definition;
-
-  this._tileVariationStrategy = tileVariationStrategy;
 
   this._textureIndices = [];
   this._textureMap = new IgeTextureMap();
@@ -52,11 +50,12 @@ SingleTileLayer.prototype.loadTextures = function () {
  * @param {number} x
  * @param {number} y
  * @param {terrain} terrain
+ * @param {number} tileVariation
  * @param {Array.<terrain>} adjacent
  */
-SingleTileLayer.prototype.drawTile = function (x, y, terrain, adjacent) {
+SingleTileLayer.prototype.drawTile = function (x, y, terrain, adjacent, tileVariation) {
   if (terrain[this._definition.zone] === this._definition.name) {
-    var index = this._tileVariationStrategy(x, y) % this._textureIndices.length;
+    var index = tileVariation % this._textureIndices.length;
     this._textureMap.paintTile(x, y, this._textureIndices[index], 1);
 
   } else {
